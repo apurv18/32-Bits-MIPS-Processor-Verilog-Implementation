@@ -1,33 +1,15 @@
-module MipsCPU(clock, reset, 
-					PCin,PCout,
-					inst,
-					RegDst, RegWrite, ALUSrc, MemtoReg, MemRead, MemWrite, Branch,
-					ALUOp,
-					WriteReg,
-					ReadData1, ReadData2,
-					Extend32,
-					ALU_B,
-					ShiftOut,
-					ALUCtl,
-					Zero,
-					ALUOut,
-					Add_ALUOut,
-					AndGateOut,
-					ReadData,
-					WriteData_Reg);
-					
+module MipsCPU(clock, reset, PC_In,PC_Out,inst,RegDst, RegWrite, ALUSrc, MemtoReg, MemRead, MemWrite, Branch,ALUOp,WriteReg,ReadData1, ReadData2,Extend32,ALU_B,ShiftOut,ALUCntrl,ALUZero,ALUOut,Add_ALUOut,AndGateOut,ReadData,WriteData_Reg);				
 	input clock;
 	input reset;
-	
 	//Connection of PC
-	output wire [31:0] PCin, PCout;
+	output wire [31:0] PC_In, PC_Out;
 	PC pc_0(
 		//inputs
 		.clock(clock),
 		.reset(reset),
-		.PCin(PCin),
+		.PC_In(PC_In),
 		//outputs
-		.PCout(PCout)	
+		.PC_Out(PC_Out)	
 	);
 	
 	//Connection of InstMem
@@ -59,7 +41,7 @@ module MipsCPU(clock, reset,
 	
 	//Connection of the Mux between InstMem and RegisterFile
 	output wire [4:0]  WriteReg;
-	Mux1 mux1_0(
+	Instr_MUX mux1(
 		//inputs
 		.inst20_16(inst[20:16]),
 		.inst15_11(inst[15:11]),
@@ -86,7 +68,7 @@ module MipsCPU(clock, reset,
 	
 	//Connection of SignExtend
 	output wire [31:0] Extend32;
-	SignExtend sign_extend_0(
+	bit32SignExtend sign_extend_0(
 		//inputs
 		.inst15_0(inst[15:0]),
 		//outputs
@@ -95,7 +77,7 @@ module MipsCPU(clock, reset,
 	
 	//Connection of Mux2
 	output wire [31:0] ALU_B;
-	Mux2 mux2_0(
+	bigALU_MUX mux2(
 		//inputs
 		.ALUSrc(ALUSrc),
 		.ReadData2(ReadData2),
@@ -118,22 +100,22 @@ module MipsCPU(clock, reset,
 	ALUControl alu_control_0(
 		//inputs
 		.ALUOp(ALUOp),
-		.FuncCode(inst[5:0]),
+		.Func(inst[5:0]),
 		//outputs
-		.ALUCtl(ALUCtl)	
+		.ALUCntrl(ALUCntrl)	
 	);
 	
 	//Connection of ALU
 	output wire Zero;
 	output wire [31:0] ALUOut;
-	ALU alu_0(
+	bigALU alu(
 		//inputs
 		.A(ReadData1),
 		.B(ALU_B),
-		.ALUCtl(ALUCtl),
+		.ALUCntrl(ALUCntrl),
 		//outputs
 		.ALUOut(ALUOut),
-		.Zero(Zero)
+		.ALUZero(ALUZero)
 	);
 	
 	//Connection of Add_ALU
