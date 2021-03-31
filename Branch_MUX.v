@@ -5,7 +5,6 @@ module Branch_MUX (PC_Out, BranchALUOut, AndGateOut, PC_In);
   input [31:0] BranchALUOut;
 	input AndGateOut;	
   output reg [31:0] PC_In;
-
 	initial
     begin
 		  PC_In <= 0;                   //Initial value of output is set to 0
