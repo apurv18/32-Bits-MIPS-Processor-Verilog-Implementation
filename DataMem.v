@@ -9,12 +9,13 @@ module DataMem(Address, WriteData, MemWrite, MemRead, ReadData, clock);
   reg [31:0] RAM [0:255]; //32 bits memory with 255 entries
 	
 	always @ (posedge clock)
-    begin
-		  if (MemWrite == 1)
-        RAM[address[7:2]] <= WriteData;
-  	end
+		begin
+			if (MemWrite == 1)
+        			RAM[address[7:2]] <= WriteData;
+    		end
 	always @(negedge clock)
-    begin
-		  if (MemRead == 1)
-        ReadData <= RAM[address[7:2]];
-	end	
+    		begin
+		  	if (MemRead == 1)
+        			ReadData <= RAM[address[7:2]];
+		end	
+endmodule
