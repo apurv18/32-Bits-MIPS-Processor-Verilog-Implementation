@@ -7,6 +7,12 @@ module DataMem(Address, WriteData, MemWrite, MemRead, ReadData, clock);
   output reg [31:0] ReadData;
 
   reg [31:0] RAM [0:255]; //32 bits memory with 255 entries
+
+	initial begin
+		RAM[0] = 25;
+		RAM[1] = 54;
+		RAM[2] = 17;
+	end
 	
 	always @ (posedge clock)
 		begin
